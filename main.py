@@ -3,10 +3,19 @@ from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 from manager import WebSocketManager
 from fastapi.websockets import WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
+app = FastAPI(title="ChatApp")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 manager = WebSocketManager()
 
-app = FastAPI(title="ChatApp")
 template = Jinja2Templates(directory="templates")
 @app.get("/")
 def root_endpoint(request : Request):
@@ -38,3 +47,8 @@ async def websocket_endpoint(websocket: WebSocket):
         except WebSocketDisconnect:
             await manager.disconnect(websocket)
             
+            
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app="main:app", host="0.0.0.0",port=8000 ,reload=True)
+
