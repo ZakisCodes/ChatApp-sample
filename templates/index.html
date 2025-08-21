@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatApp with Websocket</title>
+</head>
+<body>
+    <h1>Basic Chat Service</h1>
+
+    <form>
+        <label for="message">Message</label>
+        <p>
+            <input type="text" name="message" id="message">
+            <button type="submit">Send</button>
+        </p>
+    </form>
+    <div id="messages"></div>
+    <script>
+        const ws = new WebSocket('ws://127.0.0.1:8000/ws')
+        const form = document.querySelector('form');
+        const messageDiv = document.getElementById('messages');
+        ws.onopen = () => {
+            console.log('Connected to websocket');
+        }
+        
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log(data);
+
+            const newMessage = document.createElement('p');
+            newMessage.innerHTML = `<b>${data.client}</b>  Says: ${data.message}`
+            messageDiv.appendChild(newMessage); 
+            const hr = document.createElement('hr');
+            messageDiv.appendChild(hr); 
+        }
+        
+        ws.onerror = (error) =>{
+            console.log('Websocket Error',error);
+        }
+        
+        ws.onclose = () => {
+            console.log('Connection closed to websocket');
+        }
+
+        
+        form.addEventListener('submit', (e)=>{
+            e.preventDefault()
+            const formData = new FormData(form);
+            const message = formData.get('message');
+            ws.send(JSON.stringify({type: "text", content: message}))
+            form.reset();
+        })
+    </script>
+    
+</body>
+</html>
