@@ -17,7 +17,7 @@
     </form>
     <div id="messages"></div>
     <script>
-        const ws = new WebSocket('ws://127.0.0.1:8000/ws')
+        const ws = new WebSocket('wss://cloackchat.onrender.com//ws')
         const form = document.querySelector('form');
         const messageDiv = document.getElementById('messages');
         ws.onopen = () => {
