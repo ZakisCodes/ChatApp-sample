@@ -378,7 +378,7 @@
 
             connectWebSocket() {
                 try {
-                    this.ws = new WebSocket('ws://127.0.0.1:8000/ws');
+                    this.ws = new WebSocket('wss://cloackchat.onrender.com//ws');
                     
                     this.ws.onopen = () => {
                         console.log('Connected to websocket');
