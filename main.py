@@ -6,9 +6,16 @@ from fastapi.websockets import WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(title="ChatApp")
 
+origins = [
+    "https://cloackchat.onrender.com",  # Your Render domain
+    "http://localhost:3000",           # Your local development frontend, for testing
+    "http://127.0.0.1:3000",
+    "http://localhost:8000"            # Add other origins as needed
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
